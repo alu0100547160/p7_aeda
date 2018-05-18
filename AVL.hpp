@@ -4,9 +4,12 @@
 #include <iostream>
 #include <cmath>
 #include <vector>
-#include "nodoAVL.hpp"
 #include <queue>
-using namespace std;
+
+#include "Logger.hpp"
+#include "nodoAVL.hpp"
+
+#define MY_LOG Log(__FUNCTION__)
 
 template <class T>
 class AVL{
@@ -17,7 +20,6 @@ class AVL{
 		int n_nodos;
 		int comp_b; // comparar número de busquedas
 
-	public:
 		AVL(){
 			raiz = NULL;
 			comp_b = 0;
@@ -38,6 +40,7 @@ class AVL{
 				return nodo ;
 			if (clave_dada < nodo->clave )
 				return BuscarRama(nodo->izdo, clave_dada);
+				
 			return BuscarRama(nodo->dcho, clave_dada);
 		}
 
@@ -51,7 +54,7 @@ class AVL{
 		void insertar_bal( nodoAVL<T>* &nodo,nodoAVL<T>* nuevo, bool& crece) {
 			if (nodo == NULL) {
 				nodo = nuevo;
-				crece = true;
+			crece = true;
 			} else if (nuevo -> clave < nodo -> clave) {
 				insertar_bal(nodo -> izdo,nuevo,crece);
 				if (crece) 
@@ -64,39 +67,37 @@ class AVL{
 		}
 
 		void insertar_re_bal_izq(nodoAVL<T>* &nodo,bool& crece) {	
-			switch (nodo -> bal) {
-				case -1: nodo -> bal = 0;
-					crece = false;
-					break;
-				case 0: 
-					nodo -> bal = 1 ;
-					break;
-				case 1: 
-					nodoAVL<T>* nodo1 = nodo -> izdo;
-					if (nodo1 -> bal == 1)
-						rotacion_II(nodo);
-					else rotacion_ID(nodo);
-						crece = false;
+			
+			if (nodo->bal == -1) {
+				nodo->bal = 0;
+				crece = false;
+			}else if (nodo->bal == 0) {
+				nodo->bal = 1;
+				
+			}else {
+				nodoAVL<T>* nodo1 = nodo -> izdo;
+				if (nodo1 -> bal == 1)
+					rotacion_II(nodo);
+				else rotacion_ID(nodo);
+				crece = false;
 			}
 		}
 
 		void insertar_re_bal_dcha (nodoAVL<T>* &nodo,bool& crece) {
-			switch (nodo -> bal) {
-				case 1: 
-					nodo -> bal = 0;
-					crece = false;
-					break;
-				case 0: 
-					nodo -> bal = -1;
-					break;
-				case -1: 
-					nodoAVL<T>* nodo1 = nodo -> dcho;
-					if (nodo1 -> bal == -1)
-						rotacion_DD(nodo);
-					else 
-						rotacion_DI(nodo);
-					crece = false;
-				}
+			
+			if (nodo->bal == 1){
+				nodo-> bal = 0;
+				crece = false;
+			} else if (nodo->bal == 0){
+				nodo->bal = -1;
+			} else {
+				nodoAVL<T>* nodo1 = nodo -> dcho;
+				if (nodo1 -> bal == -1)
+					rotacion_DD(nodo);
+				else 
+					rotacion_DI(nodo);
+				crece = false;
+			}
 		}
 
 		void eliminar( int clave_data) {
@@ -140,7 +141,7 @@ class AVL{
 			if (decrece)
 				eliminar_re_balancea_dcha(sust, decrece);
 			} else {
-				eliminado -> dato = sust -> dato;
+			//	eliminado -> dato = sust -> dato;
 				eliminado -> clave = sust -> clave;
 				eliminado = sust;
 				sust = sust -> izdo;
@@ -158,7 +159,7 @@ class AVL{
 					else {
 						if (nodo1 -> bal == 0)
 							decrece = false;
-							rotacion_DD(nodo);
+						rotacion_DD(nodo);
 					}
 					break;
 				case 0:
@@ -168,6 +169,9 @@ class AVL{
 					
 				case 1: 
 					nodo -> bal = 0;
+					break;
+				default:
+					decrece = false;
 			}
 		}
 
@@ -175,23 +179,27 @@ class AVL{
 			nodoAVL<T>* nodo1;
 			switch (nodo -> bal) {
 			case 1: 
-				nodo -> izdo;
+				nodo1 = nodo -> izdo;
 				if (nodo1 -> bal < 0)
-					rotacion_ID(nodo);
+					rotacion_ID(nodo); 
 				else {
 					if (nodo1 -> bal == 0)
-					decrece = false;
+						decrece = false;
 					rotacion_II(nodo);
 				}
 				break ;
 			
 			case 0:
-				 nodo -> bal = 1;
+				nodo -> bal = 1;
 				decrece = false;
 				break;
 			case -1: 
 				nodo ->bal = 0;
+				break;
+			default : 
+				decrece = false;
 			}
+			
 		}
 
 		void contarnodos(){ 
@@ -218,7 +226,7 @@ class AVL{
 		} else { // nodo1->bal == 0
 			nodo -> bal = -1;
 			nodo1 -> bal = 1;
-		 }
+		}
 		nodo = nodo1;
 		}
 
@@ -232,7 +240,7 @@ class AVL{
 			} else { // nodo1->bal == 0
 				nodo -> bal = 1;
 				nodo1 -> bal = -1;
-			  }
+			 }
 			nodo = nodo1;
 		}
 
@@ -246,11 +254,13 @@ class AVL{
 			if (nodo2 -> bal == -1)
 				nodo1 -> bal = 1;
 			else nodo1 -> bal = 0;
-				if (nodo2 -> bal == 1)
-					nodo -> bal = -1;
-				else nodo -> bal = 0;
-					nodo2 -> bal = 0;
-				nodo = nodo2;
+			if (nodo2 -> bal == 1){
+				nodo -> bal = -1;
+			}else {
+				nodo -> bal = 0;
+				nodo2 -> bal = 0;
+			}
+			nodo = nodo2;
 		}
 
 		void  rotacion_DI (nodoAVL<T>* &nodo) {
@@ -260,22 +270,21 @@ class AVL{
 			nodo2 -> izdo = nodo;
 			nodo1 -> izdo = nodo2 -> dcho;
 			nodo2 -> dcho = nodo1;
-			if (nodo2 -> bal == 1)
-				nodo1 -> bal = -1;
-			else 
-				nodo1 -> bal = 0;
-			if (nodo2 -> bal == -1)
+			if (nodo2 -> bal == 1) nodo1 -> bal = -1;
+			else nodo1 -> bal = 0;
+			if (nodo2 -> bal == -1){
 				nodo -> bal = 1;
-			else 
+			}else {
 				nodo -> bal = 0;
-			nodo2 -> bal = 0;
+				nodo2 -> bal = 0;
+			}
 			nodo = nodo2;
 		}
 
 		void mostrar(){
 	   		if(raiz != NULL){
 	         bool nivel_= true; //Chivato para el nivel
-			   queue<nodoAVL<T>*> cola;
+			   std::queue<nodoAVL<T>*> cola;
 			   cola.push(raiz);
 			   int j = 0; //Nivel
 			   int i = 1; //Iterador por nivel
@@ -284,33 +293,35 @@ class AVL{
 			   contarnodos(); //Hacemos un dfs para ver cuantos nodos hay activos
 			   while (k < n_nodos && !cola.empty()){ //Mientras no haya recorrido todos los nodos activos
 	            if(nivel_){ 
-	               cout << "Nivel " << j << ":"; //Printamos el nivel
+		       
+	               MY_LOG << "Nivel ";
+                       MY_LOG <<  j ; //Printamos el nivel
+                       MY_LOG << ":"; 
 	               nivel_= false;
 	            }
 				   if (cola.front() != NULL){ //Si no es null, pusheamos normal
-	               	   cola.push(cola.front() -> izdo);
+                                           cola.push(cola.front() -> izdo);
 					   cola.push(cola.front() -> dcho);
 				   } else{ 
 					   cola.push(NULL);
 					   cola.push(NULL);
 				   }
 				   if (cola.front() != NULL){
-	               	  for(l=0;l<2;l++) 
-	                  	cout << " ";
-					   //printf ("%d",cola.front()->get_clave()); 
-						cout << cola.front()->get_clave();
-	           
-	           	   } else{
-				     	for(l = 0; l < 2; l++)
-	                 		printf(" ");
-					     printf("[.]"); 
-				         k--; //Cada vez que imprimamos un nodo vacio, restamos 1 al contador para seguir con el limite de los nodos activos
-	           	     }
+                                            for(l=0;l<2;l++) 
+                                                MY_LOG << " ";
+                                            printf ("%d",cola.front()->get_clave()); 
+                                                            
+                                    }else{
+                                            for(l = 0; l < 2; l++)
+                                                printf(" ");
+                                            printf("[.]"); 
+                                            k--; //Cada vez que imprimamos un nodo vacio, restamos 1 al contador para seguir con el limite de los nodos activos
+                                    }
 				  
 				  cola.pop();
 				   if (i == pow(2,j)){ //Cuando imprimimos todos los nodos del nivel 2^j
 					   j++; //Pasamos al siguiente nivel
-					   printf("\n");
+					   MY_LOG << "\n";
 					   i = 0; //Y reseteamos el iterador
 					   nivel_= true; //Activamos el bool que nos avisará del siguiente nivel
 				   }

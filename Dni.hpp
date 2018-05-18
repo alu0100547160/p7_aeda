@@ -2,8 +2,9 @@
 #include <iostream>
 #include <stdlib.h>
 #include <time.h>
+#include <assert.h> 
 
-using namespace std;
+
 
 const int  MIN = 00000000;
 const int  MAX = 99999999;
@@ -15,13 +16,11 @@ class DNI{
    
 public:
 
-    DNI(int dn){
-        if((dn < MIN )|| (dn > MAX))
-         cout << "error en dni"<<endl;
-        else
-         dni = dn;
-         letra =  rand() % 9;
-    
+    explicit DNI(const int dn):
+    dni(dn)
+    {
+        assert ((dn < MIN )|| (dn > MAX));
+        letra =  rand() % 9;
          
     }
      
@@ -96,10 +95,10 @@ public:
         return (get_dni() >= b.get_dni());
     }
     
-    ostream& write(ostream& os){
+    std::ostream& write(std::ostream& os){
 
 			
 		        os << dni;
 		
-	}
+    }
 };

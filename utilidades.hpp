@@ -1,8 +1,11 @@
 #include <vector> 
+#include <assert.h>
+#include <cstdio>
+#include <cstdlib>
 
-using namespace std;
+#define MY_LOG Log(__FUNCTION__) 
 
-bool en_banco(vector<DNI> banco, DNI eldni) {
+bool en_banco(std::vector<DNI> banco, DNI eldni) {
     for (int i = 0; i < banco.size(); i++) {
         if (banco[i] == eldni)
             return true;
@@ -11,42 +14,39 @@ bool en_banco(vector<DNI> banco, DNI eldni) {
 }
 
 
-int  demostracion( AVL<int> & arbol2,int dem){
+int  demostracion( AVL<int>& arbol2,int dem){
 
         int in;
         int valor;
-        cout << "   [0] Salir" << endl;
-		cout << "   [1] Insertar clave" << endl;
-		cout << "   [2] Eliminar clave" << endl;
-		cout << "Opción: ";
-		cin >> dem;
+        MY_LOG << "   [0] Salir\n";
+        MY_LOG << "   [1] Insertar clave\n"; 
+        MY_LOG << "   [2] Eliminar clave\n";
+        MY_LOG << "Opción:\n ";
+		std::cin >> dem;
 		switch(dem){
 			case 0:
 				dem = 0;
 				break;
 
 			case 1:
-				cout << endl;
-				cout<<" Insertar: ";
-				cin >> in;
+				MY_LOG << "\n";
+				MY_LOG << " Insertar: ";
+				std::cin >> in;
 				/* Nota si se quiere probar con enteros pequeños quitar condiciones */
-				if(( in < MIN) || (in > MAX))
-					cout << " El DNI no puede ser inferior a " << MIN << "ni mayor a " << MAX << endl;
-				else
-					arbol2.Insertar(in);
+				//assert(( in < MIN) || (in > MAX));
+				arbol2.Insertar(in);
 
 				break;
 				
 			case 2:
 				arbol2.mostrar();
-				cout <<"\n\n";
-				cout << " Introduzca valor a eliminar: ";
-				cin >> valor;
+				MY_LOG << "\n\n Introduzca valor a eliminar: ";
+				std::cin >> valor;
 				arbol2.eliminar(valor);
 				break;
 				
 			default:
-				cout << "\nValor no encontrado " << endl;
+				MY_LOG << "\nValor no encontrado ";
 				break;
 
 		}
@@ -62,15 +62,21 @@ int estadistica (AVL<int>& arbol){
 		int n_nodos;
 		DNI numeros;
 		
-		cout << "\nIntroduzca el número de nodos a insertar: ";
-		cin >> n_nodos;
-		cout << "Introduzca el número de pruebas: ";
-		cin >> n_pruebas;
+		MY_LOG <<  "\nIntroduzca el número de nodos a insertar: ";
+		std::cin >> n_nodos;
+		MY_LOG <<  "Introduzca el número de pruebas: ";
+		std::cin >> n_pruebas;
 
 		//Variables comparaciones
 	
-		int compi[n_pruebas],mini,medi,maxi; //variables insertar
-		int compb[n_pruebas],minb,medb,maxb; //variables búsqueda
+		//int compi[n_pruebas];
+		int mini;
+		int medi;
+		int maxi; //variables insertar
+		//int compb[n_pruebas];
+		int minb;
+		int medb;
+		int maxb; //variables búsqueda
 		mini = 99999999;
 		maxi = 0;
 		medi = 0;
@@ -99,18 +105,24 @@ int estadistica (AVL<int>& arbol){
 	
 			for(int i = 0; i < n_pruebas; i++){
 				arbol.Buscar(ref[i]);
-				if(arbol.comp_b > maxi)
-					maxi = arbol.comp_b ; 
-				if(arbol.comp_b <  mini)
-					mini = arbol.comp_b ; 
-					medi += arbol.comp_b ; 
-					arbol.reset();
+				if(arbol.comp_b > maxi) 
+                                    maxi = arbol.comp_b ; 
+				if(arbol.comp_b <  mini) 
+                                    mini = arbol.comp_b ; 
+                                medi += arbol.comp_b ; 
+                                arbol.reset();
 			}	
 
-	// Resultado de las comparaciones
-		cout << "              N    P    Mínimo   Medio   Máximo\n" << endl;
-		cout << "Búsqueda      " << n_nodos  << "    " <<  n_pruebas << "        " << minb << "      " <<   medb/n_pruebas  <<  "     " << maxb  << endl;
-		cout << "\nInsercción    " << n_nodos  << "    " <<  n_pruebas << "        " << mini << "      " <<   medi/n_pruebas  <<  "     " << maxi  << endl;
-		
+	// Resultado de las comparaciones 
+		MY_LOG <<  "              N    P    Mínimo   Medio   Máximo\n" ;
+                MY_LOG <<  "              " <<n_nodos << "    " <<  n_pruebas  << "      "<< minb << "      "<< medb/n_pruebas<< "       "<< maxb;
+		MY_LOG << "\nInsercción:   ";
+                MY_LOG <<   n_nodos << "    " <<  n_pruebas  << "      "<< mini << "      "<< medi/n_pruebas<< "       "<< maxi;
+		MY_LOG <<  "\n";
               
 }
+
+
+
+
+

@@ -5,7 +5,10 @@
 #include "AVL.hpp"
 #include "Dni.hpp"
 #include "utilidades.hpp"
-using namespace std;
+#include "Logger.hpp"
+
+
+#define MAGIC_LOG Log(__FUNCTION__) 
 
 
 int main(void){
@@ -17,11 +20,11 @@ int main(void){
 	AVL<int> arbol2;
 
   do{
- 	cout << "   1. Modo Demostracion" << endl;
-	cout << "   2. Modo Estadistica" << endl;
-	cout << "   3. Salir " << endl;
-	cout << "Opción: ";
-	cin >> opc;
+ 	MAGIC_LOG << "   1. Modo Demostracion\n";
+        MAGIC_LOG << "   2. Modo Estadistica\n"; 
+        MAGIC_LOG << "   3. Salir\n";
+        MAGIC_LOG << " Opción:\n";
+	std::cin >> opc;
 
 	if(opc == 1){
 	  do{

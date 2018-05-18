@@ -5,21 +5,22 @@
 #include <cmath>
 #include <vector>
 #include <cstdlib>
-using namespace std;
+
+
 
 template <class T>
 class nodoAVL{
 
 	public:
 		// Miembros:
-		   T dato;
+		   //T dato;
 		   T clave;
 		   int bal;
 		   nodoAVL *izdo;
 		   nodoAVL *dcho;
 		   
 		   nodoAVL(T dat, T cl, nodoAVL *iz = NULL, nodoAVL *de = NULL){
-		   	dato = dat;
+		//   	dato = dat;
 		   	clave = cl;
 		   	bal = 0;
 		   	izdo = iz;

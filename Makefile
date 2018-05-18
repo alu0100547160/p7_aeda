@@ -10,7 +10,7 @@
 
 CXX = g++ -std=c++11
 CFLAGS =  -g -Wall -O2
-SRC = main.cpp AVL.hpp  nodoAVL.hpp utilidades.hpp Dni.hpp
+SRC = main.cpp AVL.hpp  nodoAVL.hpp utilidades.hpp Dni.hpp Logger.hpp
 OBJ = main.o
 
 
@@ -24,4 +24,4 @@ clean:
 
 # Reglas impl�citas
 
-main.o: main.cpp AVL.hpp  nodoAVL.hpp utilidades.hpp Dni.hpp
+main.o: main.cpp AVL.hpp  nodoAVL.hpp utilidades.hpp Dni.hpp Logger.hpp
